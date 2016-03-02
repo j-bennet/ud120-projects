@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+from time import time
 import matplotlib.pyplot as plt
 from prep_terrain_data import makeTerrainData
 from class_vis import prettyPicture
@@ -31,11 +31,21 @@ plt.show()
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
 
+from sklearn.ensemble import AdaBoostClassifier
+clf = AdaBoostClassifier()
 
+print 'features:', len(features_train[0])
 
+t0 = time()
+clf.fit(features_train, labels_train)
+print "training time:", round(time() - t0, 3), "s"
 
+t0 = time()
+prediction = clf.predict(features_test)
+print "prediction time:", round(time() - t0, 3), "s"
 
-
+accuracy = clf.score(features_test, labels_test)
+print 'accuracy:', accuracy
 
 
 try:
