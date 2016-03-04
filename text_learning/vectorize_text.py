@@ -36,32 +36,52 @@ word_data = []
 ### can iterate your modifications quicker
 temp_counter = 0
 
+if os.path.exists('your_word_data.pkl'):
+    with open('your_word_data.pkl', 'r') as f:
+        word_data = pickle.load(f)
 
-for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
-    for path in from_person:
-        ### only look at first 200 emails when developing
-        ### once everything is working, remove this line to run over full dataset
-        temp_counter += 1
-        if temp_counter < 200:
+if os.path.exists('your_email_authors.pkl'):
+    with open('your_email_authors.pkl') as f:
+        from_data = pickle.load(f)
+
+if not word_data and not from_data:
+    for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
+        for path in from_person:
+            ### only look at first 200 emails when developing
+            ### once everything is working, remove this line to run over full dataset
+            temp_counter += 1
+            # if temp_counter < 200:
             path = os.path.join('..', path[:-1])
             print path
             email = open(path, "r")
 
             ### use parseOutText to extract the text from the opened email
+            text = parseOutText(email)
 
             ### use str.replace() to remove any instances of the words
             ### ["sara", "shackleton", "chris", "germani"]
+            for sw in ["sara", "shackleton", "chris", "germani"]:
+                text = text.replace(sw, '')
 
             ### append the text to word_data
+            word_data.append(text)
 
             ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
-
+            from_data.append(0 if name == 'sara' else 1)
 
             email.close()
 
-print "emails processed"
-from_sara.close()
-from_chris.close()
+    print "emails processed"
+    from_sara.close()
+    from_chris.close()
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+tf = TfidfVectorizer(stop_words='english')
+
+tfm = tf.fit_transform(word_data)
+vc = tf.get_feature_names()
+print 'feature names: {}'.format(len(vc))
+print 'vocab[34597]: {}'.format(vc[34597])
 
 pickle.dump( word_data, open("your_word_data.pkl", "w") )
 pickle.dump( from_data, open("your_email_authors.pkl", "w") )
