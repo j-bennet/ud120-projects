@@ -13,8 +13,7 @@ import matplotlib.pyplot as plt
 import sys
 sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
-
-
+from sklearn.preprocessing import MinMaxScaler
 
 
 def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature 1", f2_name="feature 2"):
@@ -49,18 +48,35 @@ data_dict.pop("TOTAL", 0)
 feature_1 = "salary"
 feature_2 = "exercised_stock_options"
 feature_3 = "total_payments"
-poi  = "poi"
+poi = "poi"
 features_list = [poi, feature_1, feature_2]
-data = featureFormat(data_dict, features_list )
-poi, finance_features = targetFeatureSplit( data )
+data = featureFormat(data_dict, features_list)
+poi, finance_features = targetFeatureSplit(data)
 
+
+# ff = numpy.array(finance_features)
+# ff = numpy.vstack((ff, numpy.array([200000.0, 1000000.0])))
+
+# mms = MinMaxScaler(copy=True)
+# sf = mms.fit_transform(ff)
+#
+# s1 = ff[:, [0]]
+# s2 = sf[:, [0]]
+#
+# o1 = ff[:, [1]]
+# o2 = sf[:, [1]]
+#
+# print 'salary:', s1[-1], s2[-1]
+# print 'options:', o1[-1], o2[-1]
+
+# exit(0)
 
 ### in the "clustering with 3 features" part of the mini-project,
 ### you'll want to change this line to 
 ### for f1, f2, _ in finance_features:
 ### (as it's currently written, the line below assumes 2 features)
 for f1, f2 in finance_features:
-    plt.scatter( f1, f2 )
+    plt.scatter(f1, f2)
 plt.show()
 
 ### cluster here; create predictions of the cluster labels
