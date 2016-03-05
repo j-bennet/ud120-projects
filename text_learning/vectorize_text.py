@@ -60,7 +60,7 @@ if not word_data and not from_data:
 
             ### use str.replace() to remove any instances of the words
             ### ["sara", "shackleton", "chris", "germani"]
-            for sw in ["sara", "shackleton", "chris", "germani"]:
+            for sw in ["sara", "shackleton", "chris", "germani", "sshacklensf", "cgermannsf"]:
                 text = text.replace(sw, '')
 
             ### append the text to word_data
