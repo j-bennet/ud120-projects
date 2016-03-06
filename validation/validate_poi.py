@@ -25,8 +25,32 @@ features_list = ["poi", "salary"]
 data = featureFormat(data_dict, features_list)
 labels, features = targetFeatureSplit(data)
 
+### it's all yours from here forward!
 
+import numpy
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import cross_validation
+from sklearn.metrics import accuracy_score
+from time import time
 
-### it's all yours from here forward!  
+features = numpy.array(features)
+labels = numpy.array(labels)
 
+features_train, features_test, labels_train, labels_test = cross_validation.train_test_split(
+    features, labels, test_size=0.3, random_state=42)
 
+clf = DecisionTreeClassifier()
+
+print 'train features:\n', features_train
+print 'train labels:\n', labels_train
+
+t0 = time()
+clf.fit(features_train, labels_train)
+print "training time:", round(time() - t0, 3), "s"
+
+t0 = time()
+prediction = clf.predict(features_test)
+print "prediction time:", round(time() - t0, 3), "s"
+
+accuracy = accuracy_score(labels_test, prediction)
+print 'accuracy:', accuracy
